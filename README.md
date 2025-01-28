@@ -1,4 +1,10 @@
-# Release me
+# Test Nightlies
+
+Run the app
+
+```bash
+node main.js serve
+```
 
 Build Docker image
 
