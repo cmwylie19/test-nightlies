@@ -1,42 +1,50 @@
-// SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
-
-/* Required for SLSA Publish of version */
-
 const fs = require("fs");
 
-const packageJSON = require("../package.json");
-const packageLockJSON = require("../package-lock.json");
+const updateJSONFile = (filePath, updater) => {
+  try {
 
-const generateVersion = () => {
-  let version = "";
-  version = process.env.GITHUB_REF_NAME.split("");
-  version = version[0] === "v" ? version.slice(1) : version;
-  return version.join("");
+    const data = fs.readFileSync(filePath, "utf-8");
+    const json = JSON.parse(data);
+
+    updater(json);
+
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2) + "\n", "utf-8");
+    console.log(`Updated ${filePath}`);
+  } catch (error) {
+    console.error(`Error updating ${filePath}:`, error);
+    process.exit(1);
+  }
 };
 
-const packageJSONVersion = (packageJSON, version) => {
-  packageJSON.version = version;
-  writeToFile("./package.json", packageJSON);
-};
-const packageLockJSONVersion = (packageLockJSON, version) => {
-  packageLockJSON.version = version;
-  packageLockJSON.packages[""].version = version;
-  writeToFile("./package-lock.json", packageLockJSON);
-};
-
-const writeToFile = (file, data) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(file, JSON.stringify(data, null, 2), (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
+const updatePackageJSON = (version) => {
+  updateJSONFile("./package.json", (json) => {
+    json.version = version;
   });
 };
 
-const version = generateVersion();
-packageJSONVersion(packageJSON, version);
-packageLockJSONVersion(packageLockJSON, version);
+const updatePackageLockJSON = (version) => {
+  updateJSONFile("./package-lock.json", (json) => {
+    json.version = version;
+    if (json.packages && json.packages[""]) {
+      json.packages[""].version = version;
+    }
+  });
+};
+
+const main = () => {
+  const [,, version] = process.argv;
+
+  if (!version) {
+    console.error("Usage: node set-version.js <new-version>");
+    process.exit(1);
+  }
+
+  console.log(`Updating version to ${version}...`);
+
+  updatePackageJSON(version);
+  updatePackageLockJSON(version);
+
+  console.log("Version update complete!");
+};
+
+main();

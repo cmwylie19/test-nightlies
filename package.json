@@ -10,7 +10,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js",
+    "version": "node scripts/set-version.js"
   },
   "repository": {
     "type": "git",
