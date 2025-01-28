@@ -43,14 +43,19 @@ jobs:
 
       - name: Publish to GHCR
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_RELEASE }}
         run: |
           #!/bin/bash
 
           npm install -g npm
 
+          # Generate version
           npm run version
           VERSION=$(npx test-nightlies-cw@latest version)-nightly-$(date +"%m-%d-%Y")
+          
+          # Export VERSION for subsequent steps
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
           # Build Controller Image
-          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:${{ VERSION  }} .
-          npm public --tag $VERSION
+          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$VERSION .
+          npm publish --tag $VERSION

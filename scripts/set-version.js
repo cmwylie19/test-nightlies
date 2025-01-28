@@ -2,7 +2,6 @@ const fs = require("fs");
 
 const updateJSONFile = (filePath, updater) => {
   try {
-
     const data = fs.readFileSync(filePath, "utf-8");
     const json = JSON.parse(data);
 
@@ -32,7 +31,7 @@ const updatePackageLockJSON = (version) => {
 };
 
 const main = () => {
-  const [,, version] = process.argv;
+  const [, , version] = process.argv;
 
   if (!version) {
     console.error("Usage: node set-version.js <new-version>");
