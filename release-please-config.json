@@ -1,0 +1,16 @@
+{
+  "release-type": "custom",
+  "plugins": [
+    {
+      "type": "custom-release",
+      "release-label": "nightly",
+      "versioning-strategy": "custom"
+    }
+  ],
+  "custom-release-type": {
+    "bump-version": false,
+    "changelog-path": "CHANGELOG.md",
+    "versioning-function": "nightly",
+    "pre-release": true
+  }
+}
