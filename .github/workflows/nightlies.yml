@@ -50,16 +50,16 @@ jobs:
           npm install -g npm
 
           LATEST_VERSION=$(npx test-nightlies-cw@latest version 2>/dev/null)
+          RAW_NIGHTLY_VERSION=$(npx test-nightlies-cw@nightly version 2>/dev/null || echo "none")
 
-          NIGHTLY_VERSION=$(npx test-nightlies-cw@nightly version 2>/dev/null || echo "none")
-
-          if [[ "$NIGHTLY_VERSION" == "none" ]]; then
+          if [[ "$RAW_NIGHTLY_VERSION" == "none" ]]; then
             echo "No nightly version found. Setting NIGHTLY_VERSION=0."
             NIGHTLY_VERSION=0
-          els
-            NIGHTLY_VERSION_PART=$(echo "$NIGHTLY_VERSION" | grep -oE "nightly\.([0-9]+)" | cut -d. -f2)
-            
-            if [[ "$LATEST_VERSION" > "${NIGHTLY_VERSION%-nightly*}" ]]; then
+          else
+            NIGHTLY_VERSION_PART=$(echo "$RAW_NIGHTLY_VERSION" | grep -oE "nightly\.([0-9]+)" | cut -d. -f2)
+
+            BASE_NIGHTLY_VERSION=${RAW_NIGHTLY_VERSION%-nightly*}
+            if [[ "$LATEST_VERSION" > "$BASE_NIGHTLY_VERSION" ]]; then
               echo "Nightly version is less than the latest version. Resetting NIGHTLY_VERSION to 0."
               NIGHTLY_VERSION=0
             else
@@ -67,9 +67,9 @@ jobs:
               echo "Incrementing NIGHTLY_VERSION to $NIGHTLY_VERSION."
             fi
           fi
-          echo $NIGHTLY_VERSION
+
           FULL_VERSION="${LATEST_VERSION}-nightly.${NIGHTLY_VERSION}"
-  
+
           echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
 
           npm version --no-git-tag-version $FULL_VERSION
