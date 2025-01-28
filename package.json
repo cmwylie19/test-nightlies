@@ -1,9 +1,11 @@
 {
   "name": "test-nightlies-cw",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "release testing",
   "main": "main.js",
-  "bin": "main.js",
+  "bin": {
+    "test-nightlies-cw": "./main.js"
+  },
   "engines": {
     "node": ">=20.0.0"
   },

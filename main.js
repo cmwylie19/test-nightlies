@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const setupServeCommand = require("./cmd/serve");
 const setupVersionCommand = require("./cmd/version");
 const { Command } = require("commander");
