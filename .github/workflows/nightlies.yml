@@ -48,14 +48,16 @@ jobs:
           #!/bin/bash
 
           npm install -g npm
+          # Get the latest 
+          FULL_VERSION=$(npx test-nightlies-cw@latest version)-nightly-$(date +"%m-%d-%Y")
 
-          # Generate version
-          npm run version
-          VERSION=$(npx test-nightlies-cw@latest version)-nightly-$(date +"%m-%d-%Y")
-          
-          # Export VERSION for subsequent steps
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          TRIMMED_VERSION=${FULL_VERSION%%-nightly*}
 
-          # Build Controller Image
-          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$VERSION .
-          npm publish --tag $VERSION
+          echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
+          echo "TRIMMED_VERSION=$TRIMMED_VERSION" >> $GITHUB_ENV
+
+          npm run version $FULL_VERSION
+
+          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$FULL_VERSION .
+
+          npm publish --tag $FULL_VERSION
