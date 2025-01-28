@@ -51,7 +51,7 @@ jobs:
 
           # Get the latest 
 
-          RAW_VERSION=$(npx test-nightlies-cw@latest version)-nightly #$(date +"%m%d%Y")
+          RAW_VERSION=$(npx test-nightlies-cw@latest version)-nightly.$(date +"%m%d%Y")
           FULL_VERSION=${RAW_VERSION#v} 
           TRIMMED_VERSION=${FULL_VERSION%%-nightly*}
 
@@ -62,4 +62,4 @@ jobs:
 
           docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$FULL_VERSION .
 
-          npm publish --tag $FULL_VERSION
+          npm publish
