@@ -1,16 +1,13 @@
 {
-  "release-type": "custom",
-  "plugins": [
-    {
-      "type": "custom-release",
-      "release-label": "nightly",
-      "versioning-strategy": "custom"
+  "packages": {
+    ".": {
+      "include-component-in-tag": false,
+      "release-type": "node",
+      "changelog-sections": [
+        { "type": "feat", "section": "Features", "hidden": false },
+        { "type": "fix", "section": "Bug Fixes", "hidden": false },
+        { "type": "chore", "section": "Chores", "hidden": false }
+      ]
     }
-  ],
-  "custom-release-type": {
-    "bump-version": false,
-    "changelog-path": "CHANGELOG.md",
-    "versioning-function": "nightly",
-    "pre-release": true
   }
 }
