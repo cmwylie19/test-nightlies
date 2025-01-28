@@ -50,8 +50,7 @@ jobs:
           npm install -g npm
 
           npm run version
-          npm publish --tag nightly
+          VERSION=$(npx test-nightlies-cw@latest version)-nightly-$(date +"%m-%d-%Y")
           # Build Controller Image
-          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:${{ npx test-nightlies-cw@latest version  }} .
-      - name: Nightly Release
-        run: npx release-please github-release --repo-url=https://github.com/cmwylie19/test-nightlies --prerelease
+          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:${{ VERSION  }} .
+          npm public --tag $VERSION
