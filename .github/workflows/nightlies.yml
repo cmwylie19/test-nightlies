@@ -48,9 +48,11 @@ jobs:
           #!/bin/bash
 
           npm install -g npm
-          # Get the latest 
-          FULL_VERSION=$(npx test-nightlies-cw@latest version).$(date +"%m%d%Y")-nightly
 
+          # Get the latest 
+          
+          RAW_VERSION=$(npx test-nightlies-cw@latest version)-nightly$(date +"%m%d%Y")
+          FULL_VERSION=${RAW_VERSION#v} 
           TRIMMED_VERSION=${FULL_VERSION%%-nightly*}
 
           echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
