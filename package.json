@@ -5,8 +5,7 @@
   "main": "main.js",
   "bin": "main.js",
   "scripts": {
-    "start": "node main.js",
-    "version": "node scripts/version.js"
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",

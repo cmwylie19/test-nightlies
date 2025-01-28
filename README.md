@@ -3,7 +3,19 @@
 Run the app
 
 ```bash
-node main.js serve
+npm start
+```
+
+Serve the webserver
+
+```bash
+npm start serve
+```
+
+Get the Version
+
+```bash
+npm start version
 ```
 
 Build Docker image
