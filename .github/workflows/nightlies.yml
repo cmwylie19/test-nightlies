@@ -51,7 +51,7 @@ jobs:
 
           # Get the latest 
 
-          RAW_VERSION=$(npx test-nightlies-cw@latest version)-nightly.$(date +"%Y%m%d")
+          RAW_VERSION=$(npx test-nightlies-cw@latest version)-nightly.$(date +"%m%d%Y")
           FULL_VERSION=${RAW_VERSION#v} 
           TRIMMED_VERSION=${FULL_VERSION%%-nightly*}
 
