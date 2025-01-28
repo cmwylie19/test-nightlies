@@ -49,7 +49,7 @@ jobs:
 
           npm install -g npm
           # Get the latest 
-          FULL_VERSION=$(npx test-nightlies-cw@latest version).$(date +"%m-%d-%Y")-nightly
+          FULL_VERSION=$(npx test-nightlies-cw@latest version).$(date +"%m%d%Y")-nightly
 
           TRIMMED_VERSION=${FULL_VERSION%%-nightly*}
 
