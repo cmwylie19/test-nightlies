@@ -62,4 +62,4 @@ jobs:
 
           docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$FULL_VERSION .
 
-          npm publish --tag $FULL_VERSION
+          npm publish --tag "nightly" # add nig
