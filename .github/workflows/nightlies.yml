@@ -49,17 +49,31 @@ jobs:
 
           npm install -g npm
 
-          # Get the latest 
+          LATEST_VERSION=$(npx test-nightlies-cw@latest version 2>/dev/null)
 
-          RAW_VERSION=$(npx test-nightlies-cw@latest version)-nightly.$(date +"%m%d%Y")2
-          FULL_VERSION=${RAW_VERSION#v} 
-          TRIMMED_VERSION=${FULL_VERSION%%-nightly*}
+          NIGHTLY_VERSION=$(npx test-nightlies-cw@nightly version 2>/dev/null || echo "none")
 
+          if [[ "$NIGHTLY_VERSION" == "none" ]]; then
+            echo "No nightly version found. Setting NIGHTLY_VERSION=0."
+            NIGHTLY_VERSION=0
+          els
+            NIGHTLY_VERSION_PART=$(echo "$NIGHTLY_VERSION" | grep -oE "nightly\.([0-9]+)" | cut -d. -f2)
+            
+            if [[ "$LATEST_VERSION" > "${NIGHTLY_VERSION%-nightly*}" ]]; then
+              echo "Nightly version is less than the latest version. Resetting NIGHTLY_VERSION to 0."
+              NIGHTLY_VERSION=0
+            else
+              NIGHTLY_VERSION=$((NIGHTLY_VERSION_PART + 1))
+              echo "Incrementing NIGHTLY_VERSION to $NIGHTLY_VERSION."
+            fi
+          fi
+          echo $NIGHTLY_VERSION
+          FULL_VERSION="${LATEST_VERSION}-nightly.${NIGHTLY_VERSION}"
+  
           echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
-          echo "TRIMMED_VERSION=$TRIMMED_VERSION" >> $GITHUB_ENV
 
-          npm run version $FULL_VERSION
+          npm version --no-git-tag-version $FULL_VERSION
 
           docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$FULL_VERSION .
 
-          npm publish --tag "nightly" # add nig
+          npm publish --tag "nightly"

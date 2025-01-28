@@ -5,7 +5,7 @@ function setupVersionCommand() {
   const program = new Command("version");
 
   program.description("Version of the webapp").action(() => {
-    console.log(`v${packageJSON.version}`);
+    console.log(`${packageJSON.version}`);
   });
 
   return program;
