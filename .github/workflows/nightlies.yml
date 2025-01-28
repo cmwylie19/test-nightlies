@@ -60,6 +60,6 @@ jobs:
 
           npm run version $FULL_VERSION
 
-          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$FULL_VERSION .
+          # docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$FULL_VERSION .
 
-          npm publish
+          npm publish --tag $FULL_VERSION
