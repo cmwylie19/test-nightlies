@@ -44,5 +44,5 @@ jobs:
       - name: Publish to GHCR and NPM
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_RELEASE }}
-        run: sh scripts/nightlies.sh
+        run: ./scripts/nightlies.sh
 
