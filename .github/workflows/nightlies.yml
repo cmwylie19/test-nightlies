@@ -49,8 +49,8 @@ jobs:
 
           npm install -g npm
 
-          LATEST_VERSION=$(npx test-nightlies-cw@latest version 2>/dev/null)
-          RAW_NIGHTLY_VERSION=$(npx test-nightlies-cw@nightly version 2>/dev/null || echo "none")
+          LATEST_VERSION=$(npx --yes test-nightlies-cw@latest version 2>/dev/null)
+          RAW_NIGHTLY_VERSION=$(npx --yes test-nightlies-cw@nightly version 2>/dev/null || echo "none")
 
           if [[ "$RAW_NIGHTLY_VERSION" == "none" ]]; then
             echo "No nightly version found. Setting NIGHTLY_VERSION=0."
@@ -70,10 +70,10 @@ jobs:
 
           FULL_VERSION="${LATEST_VERSION}-nightly.${NIGHTLY_VERSION}"
 
-          echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
+          echo "FULL_VERSION=$FULL_VERSION" >> "$GITHUB_ENV"
 
-          npm version --no-git-tag-version $FULL_VERSION
+          npm version --no-git-tag-version "$FULL_VERSION"
 
-          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:$FULL_VERSION .
+          docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cmwylie19/test-nightlies/controller:"$FULL_VERSION" .
 
           npm publish --tag "nightly"
